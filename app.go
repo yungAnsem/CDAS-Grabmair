@@ -2,10 +2,9 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"log"
-
-	"encoding/json"
 	"net/http"
 	"strconv"
 
@@ -150,10 +149,37 @@ func (a *App) deleteProduct(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusOK, map[string]string{"result": "success"})
 }
 
+func (a *App) getPriciestProduct(w http.ResponseWriter, r *http.Request) {
+	var p product
+	err := a.DB.QueryRow("SELECT id, name, price FROM products ORDER BY price DESC LIMIT 1").Scan(&p.ID, &p.Name, &p.Price)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			respondWithError(w, http.StatusNotFound, "No products found")
+		} else {
+			respondWithError(w, http.StatusInternalServerError, err.Error())
+		}
+		return
+	}
+
+	respondWithJSON(w, http.StatusOK, p)
+}
+
+func (a *App) deleteAllProducts(w http.ResponseWriter, r *http.Request) {
+	_, err := a.DB.Exec("DELETE FROM products")
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	respondWithJSON(w, http.StatusOK, map[string]string{"result": "success"})
+}
+
 func (a *App) initializeRoutes() {
 	a.Router.HandleFunc("/products", a.getProducts).Methods("GET")
 	a.Router.HandleFunc("/product", a.createProduct).Methods("POST")
 	a.Router.HandleFunc("/product/{id:[0-9]+}", a.getProduct).Methods("GET")
 	a.Router.HandleFunc("/product/{id:[0-9]+}", a.updateProduct).Methods("PUT")
 	a.Router.HandleFunc("/product/{id:[0-9]+}", a.deleteProduct).Methods("DELETE")
+	a.Router.HandleFunc("/product/priciest", a.getPriciestProduct).Methods("GET")
+	a.Router.HandleFunc("/products", a.deleteAllProducts).Methods("DELETE")
 }
