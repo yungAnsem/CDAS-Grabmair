@@ -2,9 +2,9 @@ name: Go
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "master" ]
 
 env:
   APP_DB_USERNAME: postgres
@@ -13,7 +13,7 @@ env:
 
 jobs:
   build:
-    name: Build and Test Code
+    name: Build, Test, Analyze
     runs-on: ubuntu-latest
 
     steps:
@@ -48,3 +48,10 @@ jobs:
 
     - name: Test
       run: go test -v ./...
+
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@main
+      with:
+        organization: yungAnsem             
+        projectKey: CDAS-Grabmair
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
