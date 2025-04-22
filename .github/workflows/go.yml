@@ -62,7 +62,7 @@ jobs:
           projectBaseDir: .
           args: >
             -Dsonar.organization=yungAnsem
-            -Dsonar.projectKey=ArthurGrabmair_CDAS-Grabmair
+            -Dsonar.projectKey=Arthur Grabmair_CDAS-Grabmair
             -Dsonar.sources=.
             -Dsonar.go.coverage.reportPaths=coverage.out
             -Dsonar.verbose=true
