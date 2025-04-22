@@ -62,7 +62,7 @@ jobs:
           projectBaseDir: .
           args: >
             -Dsonar.organization=yungansem
-            -Dsonar.projectKey=yungansem_CDAS-Grabmair
+            -Dsonar.projectKey=yungansem_cdas-grabmair
             -Dsonar.sources=.
             -Dsonar.go.coverage.reportPaths=coverage.out
             -Dsonar.verbose=true
