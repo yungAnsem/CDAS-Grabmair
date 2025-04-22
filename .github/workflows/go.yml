@@ -50,7 +50,7 @@ jobs:
       run: go test -v ./...
 
     - name: SonarCloud Scan
-      uses: SonarSource/sonarcloud-github-action@main
+      uses: SonarSource/sonarcloud-github-action@master
       with:
         organization: yungAnsem             
         projectKey: CDAS-Grabmair
